@@ -1,0 +1,58 @@
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Login</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="uk-card uk-card-default uk-position-top-center uk-margin-top ion-padding">
+    <img src="./assets/img/worker.svg" style="height: 150px;" class="uk-margin-auto">
+    <h3>Login With Google </h3>
+    
+      <div *ngIf="error" class="uk-alert uk-alert-danger">{{error}}</div>
+      <button (click)='start()' class="uk-button uk-align-center uk-text-center app-bg-primary-color"> Use Google</button>
+        <div class="uk-margin">
+       
+          <br />
+          <a class="uk-text-small uk-align-center uk-text-center" routerLink="/home/register">create account </a>
+        </div>
+    <!-- <div class="uk-alert uk-alert-danger">{{error}}</div>
+    <div id="firebaseui-auth-container"></div>
+    <div id="loader">Loading...</div> -->
+
+    <!-- <div class="uk-form-stacked uk-hidden" >
+      <div class="uk-margin">
+        <label class="uk-form-label" for="form-stacked-text">Email</label>
+        <div class="uk-form-controls">
+          <input
+            class="uk-input"
+            id="form-stacked-text"
+            type="email"
+            placeholder="Email"
+          />
+        </div>
+      </div>
+
+      <div class="uk-margin">
+        <label class="uk-form-label" for="form-stacked-text">Password</label>
+        <div class="uk-form-controls">
+          <input
+            class="uk-input"
+            id="form-stacked-text"
+            type="text"
+            placeholder="Password"
+          />
+        </div>
+      </div>
+
+      <div class="uk-margin">
+        <button class="uk-button app-bg-primary-color">Login</button>
+        <br />
+        <br />
+        <a class="uk-text-small uk-text-center">create account </a>
+      </div>
+    </div>
+     -->
+  
+  </div>
+</ion-content>

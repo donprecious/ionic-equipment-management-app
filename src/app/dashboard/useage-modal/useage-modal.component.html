@@ -1,0 +1,31 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Equipment Info</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <div class="uk-card uk-background-muted uk-padding">
+    <h3>Equipment usage infomation</h3>
+    <img src="./assets/img/worker.svg" class="uk-align-center" style="height: 120px; margin-bottom: 10px;">
+    <div>
+      <b>Assigned User</b>
+      <p>{{equipmentUsage.useage.firstName}} | {{equipmentUsage.useage.lastName}} </p>
+      <b>Equipment</b>
+      <p>{{equipmentUsage.equipment.name}} </p>
+      <b>Room Id</b>
+
+      <p>{{equipmentUsage.useage.roomId}}</p>
+      <b>Duration</b>
+      <p>Alocated Date: {{equipmentUsage.useage.creationTime}}</p>
+      <p>Expiring Date: {{equipmentUsage.useage.allocatedDateTime}}</p>
+      <p>Duration: {{duration}}</p>
+      <b>Map Location</b>
+      <div id='map' class="uk-width-1-1" style="height: 250px;">
+        <p>Loading Map please wait ......</p>
+      </div>
+    </div>
+  </div>
+</ion-content>

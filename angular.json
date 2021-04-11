@@ -31,8 +31,15 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/theme/variables.scss", "src/global.scss"],
-            "scripts": []
+            "styles": [
+              "node_modules/uikit/dist/css/uikit-core.min.css",
+              "node_modules/uikit/dist/css/uikit.min.css",
+              "src/theme/variables.scss", 
+              "src/global.scss"],
+            "scripts": [
+              "node_modules/uikit/dist/js/uikit-core.min.js",
+              "node_modules/uikit/dist/js/uikit.min.js"
+            ]
           },
           "configurations": {
             "production": {

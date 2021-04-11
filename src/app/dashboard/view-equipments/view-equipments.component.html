@@ -1,0 +1,39 @@
+<ion-content fullscreen>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+        refreshingSpinner="circles" refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
+  <ion-list>
+    <ion-list-header>
+      Equipments
+    </ion-list-header>
+
+    <ion-item *ngFor="let equipment of equipments " (click)='allocate(equipment.id)'>
+      <ion-avatar slot="start">
+        <img src="{{equipment.imageUrl}}">
+      </ion-avatar>
+      <ion-label>
+        <h2> {{equipment.name}}</h2>
+        <h3>{{equipment.description}}</h3>
+        <p><b class="uk-badge" *ngIf="equipment.isInUsed"> Unavaliable</b> <b class="uk-badge"
+            *ngIf="!equipment.isInUsed"> Avaliable</b></p>
+      </ion-label>
+    </ion-item>
+
+    <!-- <ion-item (click)='showAssignEquipment()'>
+      <ion-avatar slot="start">
+        <img
+          src="https://images.unsplash.com/photo-1574170608838-58a0be2efa73?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&h=100&q=80">
+      </ion-avatar>
+      <ion-label>
+        <h2>Finn</h2>
+        <h3>I'm a big deal</h3>
+        <p> <b>avaliable</b>
+          Listen, I've had a pretty messed up day...</p>
+      </ion-label>
+    </ion-item> -->
+
+  </ion-list>
+
+</ion-content>
