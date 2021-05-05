@@ -1,0 +1,33 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Room Usage Report</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">Back</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <ion-refresher slot="fixed">
+    <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+      refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-list-header>
+
+      <h4 *ngIf="userRooms.length<=0"> No Record Yet</h4>
+    </ion-list-header>
+
+    <ion-item *ngFor="let item of userRooms">
+      <ion-label>
+        <h2> {{item.user.userName}} | {{item.user.idNo}} | {{item.user.role}}</h2>
+        <h3>Date Assigned : {{dateConvert(item.creationTime)}} </h3>
+        <p>Return Date: {{ dateConvert(item.allocatedDateTime)}}</p>
+        <p *ngIf="item.hasExpired">Expired </p>
+      </ion-label>
+    </ion-item>
+
+
+  </ion-list>
+
+</ion-content>

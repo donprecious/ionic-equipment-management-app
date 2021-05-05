@@ -5,58 +5,51 @@
     </ion-toolbar>
   </ion-header>
 
-  <div class="uk-card uk-card-default uk-position-top-center uk-margin-top ion-padding">
+  <div class="uk-card uk-card-default uk-margin-top ion-padding">
     <img src="./assets/img/worker.svg" style="height: 150px" class="uk-margin-auto" />
     <h3>Register</h3>
-
-    <h3>Sigup With Google </h3>
     <div *ngIf="error" class="uk-alert uk-alert-danger">{{error}}</div>
-    <button (click)='start()' class="uk-button uk-align-center uk-text-center app-bg-primary-color"> Use Google</button>
+    <!-- <button (click)='start()' class="uk-button uk-align-center uk-text-center app-bg-primary-color"> Use Google</button> -->
     <!-- <div id="firebaseui-auth-container"></div>
     <div id="loader">Loading...</div> -->
-    <div>
-      <a class="uk-text-small uk-align-center uk-text-center" routerLink="/home/login">Login </a>
-    </div>
-    <div class="uk-form-stacked uk-hidden">
+    <form [formGroup]='form' (ngSubmit)='register()'>
+      <div class="uk-form-stacked">
       <div class="uk-margin">
         <label class="uk-form-label" for="form-stacked-text">Email</label>
         <div class="uk-form-controls">
-          <input class="uk-input" id="form-stacked-text" type="email" placeholder="Email" />
+          <input class="uk-input" formControlName='email' type="email" placeholder="Email" />
         </div>
       </div>
-
+    
       <div class="uk-margin">
         <label class="uk-form-label" for="form-stacked-text">First name</label>
         <div class="uk-form-controls">
-          <input class="uk-input" id="form-stacked-text" type="text" placeholder="First name" />
+          <input class="uk-input" formControlName='firstname' type="text" placeholder="First name" />
         </div>
       </div>
-
+    
       <div class="uk-margin">
         <label class="uk-form-label" for="form-stacked-text">Last name</label>
         <div class="uk-form-controls">
-          <input class="uk-input" id="form-stacked-text" type="text" placeholder="last name" />
+          <input class="uk-input" formControlName='lastname' type="text" placeholder="last name" />
         </div>
       </div>
       <div class="uk-margin">
         <label class="uk-form-label" for="form-stacked-text">Password</label>
         <div class="uk-form-controls">
-          <input class="uk-input" id="form-stacked-text" type="password" placeholder="Password" />
+          <input class="uk-input" formControlName='password' type="password" placeholder="Password" />
         </div>
       </div>
-      <div class="uk-margin">
-        <label class="uk-form-label" for="form-stacked-text">Confirm Password</label>
-        <div class="uk-form-controls">
-          <input class="uk-input" id="form-stacked-text" type="password" placeholder="Confirm Password" />
-        </div>
-      </div>
+  
       <div class="uk-margin">
         <button class="uk-button app-bg-primary-color">Create Account</button>
-        <br />
-        <br />
-        <a class="uk-text-small uk-text-center">login </a>
+    
       </div>
     </div>
+    </form>
 
+<div>
+  <a class="uk-text-small uk-align-center uk-text-center" routerLink="/home/login">Login </a>
+</div>
   </div>
 </ion-content>

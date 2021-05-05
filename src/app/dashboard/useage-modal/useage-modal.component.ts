@@ -1,4 +1,5 @@
-import { EquipmentsUsage } from 'src/app/model/equipments/equipments-usage-model';
+import { AuthService } from './../../service/auth.service';
+import { EquipmentsUsage, UsageLocation } from 'src/app/model/equipments/equipments-usage-model';
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -10,38 +11,41 @@ import * as moment  from 'moment'
 })
 export class UseageModalComponent implements OnInit {
   @Input() equipmentUsage : EquipmentsUsage 
-  constructor(public modalController: ModalController,  private geolocation: Geolocation,) {}
+  constructor(
+    public modalController: ModalController,
+    private authService: AuthService,
+    private geolocation: Geolocation,
+  ) { }
 
   currentPoint = { lat: 0, lng: 0 }
   duration: string;
-  ngOnInit() {
-
-      this.geolocation.getCurrentPosition().then((resp) => {
-      const lat = resp.coords.latitude;
-      const lng = resp.coords.longitude;
-      this.currentPoint.lat = lat;
-      this.currentPoint.lng = lng;
-      this.initMap(lat, lng)
-      console.log("geo location",resp)
-      }).catch((error) => {
-        console.log('Error getting location', error);
-      });
+  async ngOnInit() {
+     const locationstr = this.equipmentUsage.useage.userLocation;
+    const location = JSON.parse(locationstr) as UsageLocation;
+       this.initMap(location.lat, location.lng)
+       this.currentPoint.lat = location.lat;
+      this.currentPoint.lng = location.lng;
+   
     const allocatedDateTime = moment(this.equipmentUsage.useage.allocatedDateTime);
     const creationTime = moment(this.equipmentUsage.useage.creationTime);
     this.equipmentUsage.useage.allocatedDateTime = allocatedDateTime.toString();
     this.equipmentUsage.useage.creationTime = creationTime.toString();
-     
+    
    
-     let countDownDate = new Date(this.equipmentUsage.useage.allocatedDateTime).getTime();
-
+    let allocatedTime = new Date(this.equipmentUsage.useage.allocatedDateTime).getTime();
+    let createdTime = new Date(this.equipmentUsage.useage.creationTime).getTime();
+  
 // Update the count down every 1 second
-  const x = setInterval(() =>{
+  const x = setInterval(async () =>{
 
+    var currentServerTime = await this.authService.getServerCurrentTime().toPromise()
         // Get today's date and time
-        const now = new Date().getTime();
-
+    const current = new Date(currentServerTime);
+    const now = current.getTime()
+   // const distance =  now - allocatedTime;
+     
         // Find the distance between now and the count down date
-        const distance =  countDownDate - now;
+    const distance = allocatedTime - now;
 
         // Time calculations for days, hours, minutes and seconds
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));

@@ -12,16 +12,24 @@
     <img src="./assets/img/worker.svg" class="uk-align-center" style="height: 120px; margin-bottom: 10px;">
     <div>
       <b>Assigned User</b>
-      <p>{{equipmentUsage.useage.firstName}} | {{equipmentUsage.useage.lastName}} </p>
+      <p>{{equipmentUsage.useage.userName}} | {{equipmentUsage.useage.idNo}} </p>
       <b>Equipment</b>
-      <p>{{equipmentUsage.equipment.name}} </p>
+      <p>{{equipmentUsage.equipment.name}} | {{equipmentUsage.equipment.idNo}}</p>
       <b>Room Id</b>
 
       <p>{{equipmentUsage.useage.roomId}}</p>
       <b>Duration</b>
       <p>Alocated Date: {{equipmentUsage.useage.creationTime}}</p>
       <p>Expiring Date: {{equipmentUsage.useage.allocatedDateTime}}</p>
-      <p>Duration: {{duration}}</p>
+      <p>Duration: {{duration}}</p> 
+      <div>
+      
+        <div>
+          <a href="{{equipmentUsage?.equipment.positionInMap}}" target="_blank"> View Equipment Location</a> |
+          <a routerLink='/dashboard/equipments/report/{{equipmentUsage?.equipment.id}}' (click)=' dismiss()'> View Report</a>|
+        </div>
+      
+      </div>
       <b>Map Location</b>
       <div id='map' class="uk-width-1-1" style="height: 250px;">
         <p>Loading Map please wait ......</p>

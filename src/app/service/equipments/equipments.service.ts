@@ -4,6 +4,7 @@ import { environment } from './../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ReportEquipmentResponse } from 'src/app/model/report/report-equipment';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +26,9 @@ export class EquipmentsService {
   
   assignEquipment(allocateEquipmentModel: AllocateEquipmentModel): Observable<AllocateEquipmentResponseModel> {
    return  this.http.post<AllocateEquipmentResponseModel>(this.baseUrl + "equipment/assign-user/", allocateEquipmentModel);
+  }
+  
+   getUsers(id): Observable<ReportEquipmentResponse> {
+   return  this.http.get<ReportEquipmentResponse>(this.baseUrl + `equipment/${id}/users`);
    }
 }

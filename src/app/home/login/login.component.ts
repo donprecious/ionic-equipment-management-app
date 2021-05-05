@@ -1,55 +1,51 @@
+import { LoginRequestEnu, LoginRequestModel } from './../../model/auth-model';
+import { AuthService } from './../../service/auth.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import { StorageServiceService } from './../../service/shared/storage-service.service';
 import { UserServiceService } from './../../service/users/user-service.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import * as firebase from 'firebase';
-import * as firebaseui from 'firebaseui';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  constructor(private router: Router, private userService: UserServiceService) {}
+  constructor(private router: Router, private userService: UserServiceService,
+    private storageService: StorageServiceService,
+    private fb: FormBuilder,
+    private authService: AuthService
+  ) { }
   error = '';
   ngOnInit() {
     
   }
+  form = this.fb.group({
+    email: ['', Validators.required],
+    password: ['', Validators.required],
+  })
 
-  start() {
-   const  provider = new firebase.default.auth.GoogleAuthProvider();
-      firebase.default.auth()
-      .signInWithPopup(provider)
-      .then((result) => {
-        /** @type {firebase.auth.OAuthCredential} */
-        var credential = result.credential;
-        
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        // var token = credential.accessToken;
-        // // The signed-in user info.
-        // var user = result.user;
-        console.log('login auth result', result);
-             const profile = result.additionalUserInfo.profile as any;
-          //attempt to login  
-          this.userService.getUserByEmail(profile.email).subscribe(a => {
-            localStorage.setItem("userId", a.data.id);
+  login() {
+    if (this.form.invalid) {
+      this.error = "some filed are required"
+      return;
+    }
+    const model = {
+       username : this.form.get('email').value,
+      idNo: this.form.get('password').value
+    } as LoginRequestEnu;
+    
+    this.authService.login(model).subscribe(a => {
+      this.storageService.setItem("userId", a.data.user.id.toString())
+      this.storageService.setItem("user", JSON.stringify( a.data.user))
+      
             this.router.navigate(['/dashboard']);
-          }, err => {
+    }, err => {
             console.log(err);
              this.error =   err.error.message
           })
-          this.router.navigate(['/dashboard']);
-          return false;
-        // ...
-      }).catch((error) => {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        // ...
-      });
   }
+
   
 }

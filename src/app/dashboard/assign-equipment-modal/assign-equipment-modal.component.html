@@ -13,46 +13,49 @@
     <div>
       Eqipment Name <br>
       <b>{{equipmentsUsage?.equipment.name}}</b> <br>
-      Description <br>
-      <b>{{equipmentsUsage?.equipment.description}}</b>
+      Description : <b>{{equipmentsUsage?.equipment.description}}</b><br>
+      Room No <b>{{equipmentsUsage?.equipment.roomNo}}</b> <br>
+      ID No <b>{{equipmentsUsage?.equipment.idNo}}</b> <br>
+      
+      <a href="{{equipmentsUsage?.equipment.positionInMap}}" target="_blank"> View Equipment Location</a> |
+      <a routerLink='/dashboard/equipments/report/{{equipmentsUsage?.equipment.id}}'> View Report</a>|
+
     </div>
-
-
     <form [formGroup]="form" (ngSubmit)="submit()">
 
 
       <div class="uk-form-stacked">
         <div class="uk-margin">
           <br>
-          <label class="uk-form-label" for="form-stacked-text"> Room Id</label>
+          <label class="uk-form-label" for="form-stacked-text"> How long (in hours) would you use this equipment</label>
           <div class="uk-text-danger">{{errorMessage}}</div>
-
-          <div class="uk-form-controls">
-            <input class="uk-input" required formControlName="groupId" type="text" placeholder="Enter Room Id" />
+         
+          <div class="uk-form-controls"> 
+            <input class="uk-input" required formControlName="hours" type="number" max="48"
+              placeholder="Allocate Duration in hours" />
           </div>
-
         </div>
         <div class="uk-margin">
-          <div class="uk-form-label">Location</div>
-          <!-- <div class="uk-form-controls">
-            <select class="uk-select" #selectLoc (change)='switchLocation(selectLoc.value)'>
-              <option value="true" selected> Use current
-                location </option>
-              <option value="false">enter a location</option>
-            </select>
-          </div> -->
+          <div class="uk-form-label">Your Location(v.1.1)</div>
           <div>
             Lat: {{currentPoint.lat}} <br>
-            Lng: {{currentPoint.lng}}
-
+            Lng: {{currentPoint.lng}} <br>
+            <br>
+            You are {{distance}} Km from Equipment Location
+            <br>
+            <br>
+            
             <div id='map' class="uk-width-1-1" style="height: 250px;">
-              <p>Loading Map please wait ......</p>
+              <p>Loading Map please wait ......</p> 
+            
             </div>
           </div>
         </div>
         <div class="uk-margin">
-          <button type="submit" class="uk-button app-bg-primary-color" [disabled]='loading'>Allocate
-            Equipment</button>
+          <button type="submit" class="uk-button app-bg-primary-color" [disabled]='loading'>Assign
+            Equipment
+            <img *ngIf="loading" src="./assets/img/loader.svg" width="45" height="45">
+          </button>
         </div>
       </div>
     </form>

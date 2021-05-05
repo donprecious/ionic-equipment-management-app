@@ -1,6 +1,6 @@
 {
   "appId": "io.ionic.starter",
-  "appName": "equipment-management",
+  "appName": "NEU Equipment Management System",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",

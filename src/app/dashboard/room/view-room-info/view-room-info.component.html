@@ -1,0 +1,59 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Assign Room</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">Back</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <div class="uk-card uk-background-muted uk-padding">
+    <h3>Room Info</h3>
+    <img src="./assets/img/assign.svg" class="uk-align-center" style="height: 120px; margin-bottom: 10px;">
+    <div>
+      Room Name <br>
+      <b>{{room?.faculty }}</b> <br>
+      Room No <b>{{room?.roomNo}}</b> <br>
+      Capacity <b>{{room?.capacity}}</b> <br>
+      Current Useage <b>{{room?.currentUsageCapacity}}</b> <br>
+      <a href="{{room?.mapLocation}}" target="_blank"> View Room Location</a> |
+      <a routerLink='/dashboard/rooms/report/{{room?.id}}'> View Useage Report</a>|
+    </div>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+
+      <div class="uk-form-stacked">
+        <div class="uk-margin">
+          <br>
+          <label class="uk-form-label" for="form-stacked-text"> How long (in hours) would you use this room</label>
+          <div class="uk-text-danger">{{errorMessage}}</div>
+
+          <div class="uk-form-controls">
+            <input class="uk-input" required formControlName="hours" type="number" max="48"
+              placeholder="Allocate Duration in hours" />
+          </div>
+        </div>
+        <div class="uk-margin">
+          <div class="uk-form-label">Your Location</div>
+          <div>
+            Lat: {{currentPoint.lat}} <br>
+            Lng: {{currentPoint.lng}}
+  <br>
+  You are {{distance}} Km from Equipment Location
+  <br>
+            <div id='map' class="uk-width-1-1" style="height: 250px;">
+              <p>Loading Map please wait ......</p>
+
+            </div>
+          </div>
+        </div>
+        <div class="uk-margin">
+          <button type="submit" class="uk-button app-bg-primary-color" [disabled]='loading'>Assign
+            Room
+            <img *ngIf="loading" src="./assets/img/loader.svg" width="45" height="45">
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ion-content>

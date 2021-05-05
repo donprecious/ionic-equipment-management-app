@@ -1,3 +1,4 @@
+import { StorageServiceService } from './../../service/shared/storage-service.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
@@ -8,11 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardLayoutComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private storageService: StorageServiceService) { }
 
   ngOnInit() {}
   logout() {
-    localStorage.clear();
+    // localStorage.clear();
+    this.storageService.clear();
     this.router.navigate(['/home/login']);
   }
 }

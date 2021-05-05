@@ -1,0 +1,39 @@
+<ion-content fullscreen>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+      refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <!-- <ion-list>
+    <ion-list-header>
+      Rooms
+    </ion-list-header>
+
+    <ion-item *ngFor="let room of rooms " (click)='allocate(room.id)'>
+      <ion-label>
+        <h2> {{room.faculty}} | {{room.roomNo}}</h2>
+        <h3> Assible to {{room.accessLevel}} </h3>
+        <p> capacity: {{room.currentUsageCapacity}}/ <b>{{room.capacity}}</b> </p>
+
+      </ion-label>
+    </ion-item>
+
+
+  </ion-list> -->
+  <div class="uk-child-width-1-2@s uk-child-width-1-@m uk-grid-match uk-grid-collapse" uk-grid>
+    <div *ngFor="let room of rooms " (click)='allocate(room.id)'>
+      <ion-card (click)='allocate(room.id)'>
+        <ion-card-header>
+          <ion-card-subtitle>In Room No {{room.roomNo}}</ion-card-subtitle>
+          <ion-card-title>{{room.faculty}}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          Assible to {{room.accessLevel}}
+          <p> capacity: {{room.currentUsageCapacity}}/ <b>{{room.capacity}}</b> </p>
+
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

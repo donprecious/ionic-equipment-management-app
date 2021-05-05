@@ -1,3 +1,5 @@
+import { AppConstant } from './../../shared/constant';
+import { StorageServiceService } from './../../service/shared/storage-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EquipmentsService } from './../../service/equipments/equipments.service';
 import { AllocateEquipmentModel } from './../../model/equipments/equipments-model';
@@ -7,23 +9,26 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AlertController, ModalController } from '@ionic/angular';
 import { Equipment, EquipmentsUsage } from 'src/app/model/equipments/equipments-usage-model';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import {} from 'google.maps'
+import { } from 'google.maps'
+
 @Component({
   selector: 'app-assign-equipment-modal',
   templateUrl: './assign-equipment-modal.component.html',
   styleUrls: ['./assign-equipment-modal.component.scss'],
 })
 export class AssignEquipmentModalComponent implements OnInit {
+
   equipmentsUsage: EquipmentsUsage;
- 
+
   constructor(
     public modalController: ModalController,
     private fb: FormBuilder,
     private geolocation: Geolocation,
     private equipmentService: EquipmentsService,
-    public alertController: AlertController,
+    public  alertController: AlertController,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private strogeService: StorageServiceService
   ) {
     
   }
@@ -33,44 +38,63 @@ export class AssignEquipmentModalComponent implements OnInit {
     currentPoint = { lat: 0, lng: 0 }
     loading: boolean = false;
     errorMessage = '';
-
-  ngOnInit() {
+ 
+  random(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min
+  };
+  distance = 0.0;
+  async ngOnInit() {
+     
      this.form = this.fb.group({
-        groupId: ['', Validators.required]
-    });
+        hours: ['', Validators.required]
+     });
+    
     const id = this.route.snapshot.paramMap.get('id');
     this.loading = true;
-    this.equipmentService.get(id).subscribe(a => {
-      this.loading = false;
-      this.equipmentsUsage = a.data;
+      this.equipmentService.get(id).subscribe(a => {
+        this.loading = false;
+        this.equipmentsUsage = a.data;
       
-    }, err => {
-      console.log('retriveal error ', err);
-    })
-    this.geolocation.getCurrentPosition().then((resp) => {
-      const lat = resp.coords.latitude;
-      const lng = resp.coords.longitude;
-      this.currentPoint.lat = lat;
-      this.currentPoint.lng = lng;
-      this.initMap(lat, lng)
-      console.log("geo location",resp)
-      }).catch((error) => {
-        console.log('Error getting location', error);
-      });
 
-      // let watch = this.geolocation.watchPosition();
-      // watch.subscribe((data) => {
-      // // data can be a set of coordinates, or an error (if an error occurred).
-      // // data.coords.latitude
-      // // data.coords.longitude
-      //   console.log("change of location ", watch)
-      // });
-      
+      }, err => {
+        console.log('retriveal error ', err);
+      });
+  await  this.loadLocation();
+  const itemLocation = this.getLatLngFromUrl(this.equipmentsUsage.equipment.positionInMap);
+        let userLocation = new google.maps.LatLng({
+          lat: Number( this.currentPoint.lat),
+          lng: Number( this.currentPoint.lng)
+        });
+    const distance = this.getDistance(userLocation, itemLocation);
+    this.distance = distance;
+        console.log("distance", distance);
   }
 
 get f() {return this.form.controls;}
 
-  initMap(lat, lng) {
+  async loadLocation() {
+    const resp = await this.geolocation.getCurrentPosition();
+       console.log("geo location",resp)
+     const lat = resp.coords.latitude;
+      const lng = resp.coords.longitude;
+      this.currentPoint.lat = lat;
+      this.currentPoint.lng = lng;
+      this.initMap(lat, lng)
+   
+   
+      // .then((resp) => {
+      // const lat = resp.coords.latitude;
+      // const lng = resp.coords.longitude;
+      // this.currentPoint.lat = lat;
+      // this.currentPoint.lng = lng;
+      // this.initMap(lat, lng)
+      // console.log("geo location",resp)
+      // }).catch((error) => {
+      //   console.log('Error getting location', error);
+      // });
+     
+  }
+   initMap(lat, lng) {
      let map: google.maps.Map;
       map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
         center: { lat: lat, lng: lng },
@@ -85,33 +109,39 @@ get f() {return this.form.controls;}
   dismiss() {
     this.router.navigate(['dashboard']);
   }
+
+  async submit() {
   
-  submit() {
-  
-    if (this.form.invalid) {
-      this.errorMessage = "group id required"
-      return;
-    }
     if (this.currentPoint.lat == 0 && this.currentPoint.lng == 0) {
       this.errorMessage = 'location not found, ensure to turn on internet and enable location'
       return;
     }
-      const roomId = this.form.controls.groupId.value;
+    if (this.form.invalid) {
+      this.errorMessage = 'please fill all required information '
+      return;
+    }
+    if (this.distance > AppConstant.minDistanceInKm) {
+      this.errorMessage = 'Sorry you are too far , from the building'
+      return;
+    }
+    const hours = this.form.get('hours').value; 
+    const userId =Number(  await this.strogeService.getItem('userId'));
+    
       let model = {
         equipmentId: this.equipmentsUsage.equipment.id,
-        userId: localStorage.getItem('userId'),
+        userId: userId,
         userLocation: JSON.stringify(this.currentPoint),
-        roomId: roomId
+        allocatedHoursToUse: hours
       } as AllocateEquipmentModel;
-    
     
     this.equipmentService.assignEquipment(model).subscribe(a => {
         console.log("result", a)
         this.alert("success, equipment assigned successfully");
         this.dismiss();
-      }, error => {
+    }, error => {
+      this.errorMessage = error.error.data;
         console.log("errror", error)
-      });
+    });
     
 
   }
@@ -130,5 +160,24 @@ get f() {return this.form.controls;}
     console.log('onDidDismiss resolved with role', role);
   }
   
+  getLatLngFromUrl(mapurl) {
+    const regex = new RegExp('@(.*),(.*),');
+    const lon_lat_match = mapurl.match(regex);
+    const lng = lon_lat_match[1];
+    const lat = lon_lat_match[2];
+    const point = new google.maps.LatLng({lat: Number (lat), lng: Number(lng)})
+    return point;
+  }
+
+  getDistance(from: google.maps.LatLng, to: google.maps.LatLng) {
+    console.log("from", from.lat(), from.lng());
+    console.log("to", to.lat(), to.lng());
+
+    let distance = google.maps.geometry.spherical.computeDistanceBetween(from, to);
+    if (distance) {
+      distance  = distance/1000.00
+    }
+    return distance;
+  }
  
 }

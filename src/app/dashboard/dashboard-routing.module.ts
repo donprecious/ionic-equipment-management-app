@@ -1,3 +1,7 @@
+import { RoomReportComponent } from './report/room-report/room-report.component';
+import { ViewRoomInfoComponent } from './room/view-room-info/view-room-info.component';
+import { ViewRoomsComponent } from './room/view-rooms/view-rooms.component';
+import { EquipmentReportComponent } from './report/equipment-report/equipment-report.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
@@ -13,7 +17,10 @@ const routes: Routes = [
       { path: '', component: ViewEquipmentsComponent },
       { path: 'equipments', component: ViewEquipmentsComponent },
       { path: 'equipments/view/:id', component: AssignEquipmentModalComponent },
-  
+      { path: 'equipments/report/:id', component: EquipmentReportComponent },
+      { path: 'rooms', component: ViewRoomsComponent },
+      { path: 'rooms/:id', component: ViewRoomInfoComponent },
+      { path: 'rooms/report/:id', component: RoomReportComponent },
     ],
   },
 ];

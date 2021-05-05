@@ -15,7 +15,6 @@ export class DashboardGuardGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const userId = localStorage.getItem('userId');
     if (userId) {
-        
       return true;
     }
     this.router.navigate(['/home/login'])
