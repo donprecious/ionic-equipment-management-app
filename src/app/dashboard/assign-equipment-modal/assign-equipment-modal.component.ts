@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertController, ModalController } from '@ionic/angular';
 import { Equipment, EquipmentsUsage } from 'src/app/model/equipments/equipments-usage-model';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { } from 'google.maps'
 
 @Component({
@@ -75,11 +75,24 @@ get f() {return this.form.controls;}
   async loadLocation() {
     const resp = await this.geolocation.getCurrentPosition();
        console.log("geo location",resp)
-     const lat = resp.coords.latitude;
-      const lng = resp.coords.longitude;
+     let lat = resp.coords.latitude;
+    let lng = resp.coords.longitude;
+    
+    let watch = this.geolocation.watchPosition();
+watch.subscribe((data: Geoposition) => {
+//  // data can be a set of coordinates, or an error (if an error occurred).
+  lat = data.coords.latitude;
+  lng = data.coords.longitude;
       this.currentPoint.lat = lat;
       this.currentPoint.lng = lng;
       this.initMap(lat, lng)
+}, error => {
+  this.errorMessage = "unable to retrieve location, ensure internet connection or location is enable for this app"
+  console.log("location error ", error)
+}
+
+);
+     
    
    
       // .then((resp) => {
@@ -124,6 +137,8 @@ get f() {return this.form.controls;}
       this.errorMessage = 'Sorry you are too far , from the building'
       return;
     }
+    this.errorMessage = "";
+    this.loading = true;
     const hours = this.form.get('hours').value; 
     const userId =Number(  await this.strogeService.getItem('userId'));
     
@@ -137,10 +152,14 @@ get f() {return this.form.controls;}
     this.equipmentService.assignEquipment(model).subscribe(a => {
         console.log("result", a)
         this.alert("success, equipment assigned successfully");
-        this.dismiss();
+      this.dismiss();
+    this.loading = false;
+      
     }, error => {
       this.errorMessage = error.error.data;
-        console.log("errror", error)
+      console.log("errror", error);
+    this.loading = false;
+      
     });
     
 

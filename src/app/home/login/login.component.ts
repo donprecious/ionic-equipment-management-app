@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
       this.storageService.setItem("userId", a.data.user.id.toString())
       this.storageService.setItem("user", JSON.stringify( a.data.user))
       
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/home/welcome']);
     }, err => {
             console.log(err);
              this.error =   err.error.message

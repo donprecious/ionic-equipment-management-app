@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 export const AppConstant = {
-    minDistanceInKm :300
+    minDistanceInKm :environment.maxDistance
 }

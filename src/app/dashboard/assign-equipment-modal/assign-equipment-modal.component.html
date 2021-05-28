@@ -36,13 +36,13 @@
           </div>
         </div>
         <div class="uk-margin">
-          <div class="uk-form-label">Your Location(v.1.1)</div>
+          <div class="uk-form-label">Your Location(v.1.2)</div>
           <div>
             Lat: {{currentPoint.lat}} <br>
             Lng: {{currentPoint.lng}} <br>
             <br>
-            You are {{distance}} Km from Equipment Location
-            <br>
+            <!-- You are {{distance}} Km from Equipment Location
+                                    <br> -->
             <br>
             
             <div id='map' class="uk-width-1-1" style="height: 250px;">
@@ -54,7 +54,7 @@
         <div class="uk-margin">
           <button type="submit" class="uk-button app-bg-primary-color" [disabled]='loading'>Assign
             Equipment
-            <img *ngIf="loading" src="./assets/img/loader.svg" width="45" height="45">
+            <img *ngIf="loading" src="./assets/img/loader.svg" width="50" height="50">
           </button>
         </div>
       </div>

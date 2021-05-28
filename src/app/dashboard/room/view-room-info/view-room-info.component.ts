@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageServiceService } from 'src/app/service/shared/storage-service.service';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { } from 'google.maps';
 /// <reference types="google.maps" />
 import { } from 'google.maps'
@@ -32,12 +32,13 @@ export class ViewRoomInfoComponent implements OnInit {
     currentPoint = { lat: 0, lng: 0 }
     loading: boolean = false;
    errorMessage = '';
-  room: Room;
+   room: Room;
   distance = 0;
 async ngOnInit() {
 
      this.form = this.fb.group({
-        hours: ['', Validators.required]
+       hours: ['', Validators.required],
+       courseCode: ['',Validators.required]
      });
     
     const id = this.route.snapshot.paramMap.get('id');
@@ -46,6 +47,7 @@ async ngOnInit() {
         this.loading = false;
         this.room = a.data;
       }, err => {
+        this.loading = false;
         console.log('retriveal error ', err);
       });
   
@@ -61,17 +63,33 @@ async ngOnInit() {
         console.log("distance", distance);
 }
   
-    async loadLocation() {
+    // // async loadLocation() {
+    // // const resp = await this.geolocation.getCurrentPosition();
+    // //    console.log("geo location",resp)
+    // //  const lat = resp.coords.latitude;
+    // //   const lng = resp.coords.longitude;
+    // //   this.currentPoint.lat = lat;
+    // //   this.currentPoint.lng = lng;
+    // //   this.initMap(lat, lng)
+    // // }
+  async loadLocation() {
     const resp = await this.geolocation.getCurrentPosition();
-       console.log("geo location",resp)
-     const lat = resp.coords.latitude;
-      const lng = resp.coords.longitude;
-      this.currentPoint.lat = lat;
-      this.currentPoint.lng = lng;
-      this.initMap(lat, lng)
-   
-      
+    console.log("geo location", resp)
+    let lat = resp.coords.latitude;
+    let lng = resp.coords.longitude;
     
+        let watch = this.geolocation.watchPosition();
+        watch.subscribe((data: Geoposition) => {
+          //  // data can be a set of coordinates, or an error (if an error occurred).
+          lat = data.coords.latitude;
+          lng = data.coords.longitude;
+          this.currentPoint.lat = lat;
+          this.currentPoint.lng = lng;
+          this.initMap(lat, lng)
+        }, error => {
+          this.errorMessage = "unable to retrieve location, ensure internet connection or location is enable for this app"
+          console.log("location error ", error)
+        });
   }
    initMap(lat, lng) {
      let map: google.maps.Map;
@@ -86,10 +104,11 @@ async ngOnInit() {
     
    }
    async submit() {
-  
+     this.errorMessage = "";
     if (this.currentPoint.lat == 0 && this.currentPoint.lng == 0) {
       this.errorMessage = 'location not found, ensure to turn on internet and enable location'
       return;
+      
     }
     if (this.form.invalid) {
       this.errorMessage = 'please fill all required information '
@@ -100,26 +119,31 @@ async ngOnInit() {
       return;
     }
      
-    const hours = this.form.get('hours').value; 
+     const hours = this.form.get('hours').value;
+     const courseCode = this.form.get('courseCode').value;
     const userId =Number(  await this.strogeService.getItem('userId'));
     
       let model = {
         roomId: this.room.id,
         userId: userId,
         userLocation: JSON.stringify(this.currentPoint),
-        allocatedHoursToUse: hours
+        allocatedHoursToUse: hours,
+        courseCode: courseCode
       } as AssignRoomRequestModel;
-    
+     this.loading = true;
+     
     this.roomService.AssignUser(model).subscribe(a => {
         console.log("result", a)
         this.alert("success, room assigned successfully");
-        this.dismiss();
+      this.dismiss();
+       this.loading = false;
     }, error => {
       this.errorMessage = error.error.data;
-        console.log("errror", error)
-      });
+      console.log("errror", error)
+       this.loading = false;
+    });
     
-
+     
    }
     async alert(message) {
     const alert = await this.alertController.create({

@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   apiUrl: 'https://stackgip-equipment-api.herokuapp.com',
-  //  apiUrl: 'http://localhost:59906',
+  // apiUrl: 'http://localhost:59906',
+  maxDistance: 350
 };
 
 /*

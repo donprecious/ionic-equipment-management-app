@@ -3,7 +3,6 @@ import { RoomService } from './../../../service/rooms/room.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
-import { EquipmentReportModel } from 'src/app/model/report/report-equipment';
 
 @Component({
   selector: 'app-room-report',

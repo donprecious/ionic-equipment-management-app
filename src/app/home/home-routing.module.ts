@@ -1,3 +1,4 @@
+import { WelcomeComponent } from './welcome/welcome.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomePage } from './home.page';
@@ -13,14 +14,15 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent,
   },
-  // {
-  //   path: 'register',
-  //   component: RegisterComponent,
-  // },
   {
     path: 'home',
     component: HomePage,
+  },
+  {
+    path: 'welcome',
+    component: WelcomeComponent
   }
+
 ];
 
 @NgModule({

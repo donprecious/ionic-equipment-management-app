@@ -34,13 +34,20 @@
           </div>
         </div>
         <div class="uk-margin">
+          <label class="uk-form-label" for="form-stacked-text">Enter Course code</label>
+          
+          <div class="uk-form-controls">
+            <input class="uk-input" required formControlName="courseCode" type="text" placeholder="Enter course code" />
+          </div>
+          </div>
+          <div class="uk-margin">
           <div class="uk-form-label">Your Location</div>
           <div>
             Lat: {{currentPoint.lat}} <br>
             Lng: {{currentPoint.lng}}
   <br>
-  You are {{distance}} Km from Equipment Location
-  <br>
+  <!-- You are {{distance}} Km from Equipment Location
+  <br> -->
             <div id='map' class="uk-width-1-1" style="height: 250px;">
               <p>Loading Map please wait ......</p>
 
@@ -48,9 +55,9 @@
           </div>
         </div>
         <div class="uk-margin">
-          <button type="submit" class="uk-button app-bg-primary-color" [disabled]='loading'>Assign
+          <button type="submit" class="uk-button app-bg-primary-color" [disabled]='loading'>Attend
             Room
-            <img *ngIf="loading" src="./assets/img/loader.svg" width="45" height="45">
+            <img *ngIf="loading" src="./assets/img/loader.svg" width="50" height="50">
           </button>
         </div>
       </div>

@@ -20,7 +20,7 @@
 
     <ion-item *ngFor="let item of userRooms">
       <ion-label>
-        <h2> {{item.user.userName}} | {{item.user.idNo}} | {{item.user.role}}</h2>
+        <h2> {{item.user.userName}} | {{item.user.idNo}} | {{item.user.role}} | {{item.courseCode}}</h2>
         <h3>Date Assigned : {{dateConvert(item.creationTime)}} </h3>
         <p>Return Date: {{ dateConvert(item.allocatedDateTime)}}</p>
         <p *ngIf="item.hasExpired">Expired </p>

@@ -14,6 +14,7 @@ export interface UserRoom {
     userLocation:      string;
     allocatedDateTime: string;
     creationTime: string;
+    courseCode: string;
     id:                number;
 }
 
@@ -35,6 +36,7 @@ export interface AssignRoomRequestModel {
     roomId:              number;
     userLocation:        string;
     allocatedHoursToUse: number;
+    courseCode:          string;
 }
 
 //assignRoomReponse 
